@@ -1,0 +1,8 @@
+{
+  "items": [
+    { "title": "Small local models now run comfortably on a mid-range laptop", "source": "Example Tech Weekly", "minutes": 6, "tag": "ai", "url": "https://example.com/local-models" },
+    { "title": "Why AI agents need a human approval step before they spend money", "source": "Example Engineering Blog", "minutes": 8, "tag": "agents", "url": "https://example.com/approval-step" },
+    { "title": "Designing calm interfaces for phones", "source": "Example Design Notes", "minutes": 5, "tag": "design", "url": "https://example.com/calm-interfaces" },
+    { "title": "A family-run shop automates invoices with a small AI pipeline", "source": "Example Small Business", "minutes": 7, "tag": "automation", "url": "https://example.com/shop-invoices" }
+  ]
+}

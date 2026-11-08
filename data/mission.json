@@ -1,0 +1,15 @@
+{
+  "updated": "2026-11-02T08:30:00Z",
+  "tiles": [
+    { "label": "Active projects", "value": "4", "note": "1 waiting on you" },
+    { "label": "AI spend today", "value": "$0.42", "note": "cap $2.00" },
+    { "label": "AI spend month", "value": "$7.80", "note": "cap $30.00" },
+    { "label": "Automations", "value": "6 ok", "note": "last run 07:00" }
+  ],
+  "projects": [
+    { "name": "Bakery website", "emoji": "🥐", "status": "Menu page drafted; photos next", "progress": 70, "next": "Approve the new menu layout", "waitingOnYou": true },
+    { "name": "Podcast pilot", "emoji": "🎙️", "status": "Episode 1 edited", "progress": 55, "next": "Record the intro" , "waitingOnYou": false },
+    { "name": "Garden sensors", "emoji": "🌱", "status": "Two sensors online", "progress": 35, "next": "Mount the third sensor", "waitingOnYou": false },
+    { "name": "Thesis notes", "emoji": "📚", "status": "Chapter 2 outline done", "progress": 20, "next": "Summarise five papers", "waitingOnYou": false }
+  ]
+}

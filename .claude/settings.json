@@ -1,0 +1,48 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run check)",
+      "Bash(npm run test)",
+      "Bash(npm test)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run build)",
+      "Bash(node scripts/sync-skills.mjs --check)",
+      "Bash(node scripts/smoke.mjs --no-marker)",
+      "Bash(git status)",
+      "Bash(git diff:*)"
+    ],
+    "ask": [
+      "Bash(npm run dev)",
+      "Bash(npm start)",
+      "Bash(npm run sync-skills)",
+      "Bash(npm ci)"
+    ],
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.*.local)",
+      "Read(./.env.development)",
+      "Read(./.env.production)",
+      "Read(./.env.test)",
+      "Bash(cat .env:*)",
+      "Bash(cat .env.local:*)",
+      "Bash(type .env.local)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/**)",
+      "Bash(env)",
+      "Bash(printenv:*)",
+      "Bash(set)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(npm install:*)",
+      "Bash(npm i:*)",
+      "Bash(npx:*)",
+      "Bash(vercel:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}

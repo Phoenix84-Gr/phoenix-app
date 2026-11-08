@@ -1,0 +1,19 @@
+# dependencies and build output
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# secrets: never commit them (the example file with names only is kept)
+.env*
+!.env.example
+*.pem
+*.key
+
+# hosting and local tool state
+.vercel/
+.claude/settings.local.json
+npm-debug.log*
+.DS_Store

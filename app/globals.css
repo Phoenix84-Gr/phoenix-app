@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+/* THEME TOKENS. Two palettes; the visual-adapter changes colours here, never inside components.
+   Contrast targets: text on bg >= 13:1, muted >= 7:1, accent >= 4.5:1. */
+:root,
+[data-theme="space"] {
+  --bg: #03060f;
+  --bg-2: #0a1230;
+  --glow-1: #22d3ee;
+  --glow-2: #7c3aed;
+  --card: rgba(10, 18, 42, 0.55);
+  --card-line: rgba(140, 200, 255, 0.11);
+  --text: #eaf6ff;
+  --muted: #a9c0da;
+  --accent: #67e8f9;
+  --accent-2: #a78bfa;
+  --accent-ink: #031018;
+  --core: #e6fdff;
+  --rim: #020814;
+  --me: rgba(28, 58, 120, 0.72);
+  --good: #7ddc9a;
+  --warn: #ffc864;
+  --bad: #ff8a80;
+  color-scheme: dark;
+}
+
+[data-theme="ocean"] {
+  --bg: #070a2a;
+  --bg-2: #1a0730;
+  --glow-1: #1e4bff;
+  --glow-2: #ff2bd6;
+  --card: rgba(16, 14, 48, 0.55);
+  --card-line: rgba(200, 180, 255, 0.12);
+  --text: #f1eeff;
+  --muted: #c2b8e8;
+  --accent: #8fb0ff;
+  --accent-2: #ff6fe0;
+  --accent-ink: #060826;
+  --core: #fff3d6;
+  --rim: #1a0600;
+  --me: rgba(88, 36, 150, 0.7);
+  --good: #7ddc9a;
+  --warn: #ffc864;
+  --bad: #ff8a80;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jb);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  min-height: 100dvh;
+  background-image: radial-gradient(120% 60% at 50% 110%, color-mix(in srgb, var(--glow-1) 38%, transparent) 0%,
+      color-mix(in srgb, var(--glow-2) 22%, transparent) 38%, transparent 70%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  background-attachment: fixed;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Space: a quiet starfield behind everything (pure CSS, no image), two layers twinkling out of step. */
+:root:not([data-theme="ocean"]) body::before,
+:root:not([data-theme="ocean"]) body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 23px 41px, #fff, transparent), radial-gradient(1px 1px at 127px 13px, #cfe8ff, transparent),
+    radial-gradient(1.5px 1.5px at 201px 157px, #fff, transparent), radial-gradient(1px 1px at 61px 211px, #a5f3fc, transparent),
+    radial-gradient(1px 1px at 251px 83px, #ddd6fe, transparent), radial-gradient(1px 1px at 167px 239px, #fff, transparent);
+  background-size: 280px 280px;
+  opacity: 0.55;
+  animation: twinkle 7s ease-in-out infinite;
+}
+:root:not([data-theme="ocean"]) body::after {
+  background-size: 410px 410px;
+  background-position: 133px 77px;
+  opacity: 0.35;
+  animation-delay: -3.5s;
+}
+@keyframes twinkle {
+  50% { opacity: 0.15; }
+}
+
+@layer components {
+  .glass {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: 28px;
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .tech {
+    font-family: var(--font-jb), ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* small CSS orb: loading screens, the chat avatar, and the fallback when WebGL is missing */
+.orb {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, var(--core) 0%, var(--accent) 22%, var(--glow-1) 48%, var(--glow-2) 78%, var(--rim) 100%);
+  box-shadow: 0 0 60px color-mix(in srgb, var(--glow-1) 70%, transparent), inset -18px -22px 40px rgba(0, 0, 0, 0.45);
+  animation: breathe 5s ease-in-out infinite;
+}
+.orb.orb-sm { width: 44px; height: 44px; box-shadow: 0 0 22px color-mix(in srgb, var(--glow-1) 60%, transparent); }
+.orb.orb-xs { width: 28px; height: 28px; box-shadow: 0 0 14px color-mix(in srgb, var(--glow-1) 55%, transparent); }
+@keyframes breathe {
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 90px color-mix(in srgb, var(--glow-1) 85%, transparent), inset -18px -22px 40px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* ── home: one orb that glides between full screen and the bottom half ── */
+.orb-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10;
+  width: min(120vw, 76dvh);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 900ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+.home[data-menu="1"] .orb-stage {
+  transform: translate(-50%, calc(-50% + min(34vw, 180px))) scale(0.85);
+}
+.orb-canvas,
+.orb-glow {
+  position: absolute;
+  inset: 0;
+}
+.orb-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.orb-glow {
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--glow-1) 45%, transparent) 0%,
+      color-mix(in srgb, var(--glow-2) 22%, transparent) 45%, transparent 72%);
+  filter: blur(28px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  opacity: 0.8;
+}
+.orb-stage[data-pressed="1"] .orb-glow {
+  opacity: 1;
+  transform: scale(1.06);
+}
+.orb-canvas[data-fallback="1"] {
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--core) 0%, var(--accent-2) 20%, var(--glow-1) 48%, var(--glow-2) 78%, transparent 100%);
+}
+/* Space: Athena's face (athena-face.tsx). Until the 3D has its texture, or with no WebGL at all, the still portrait
+   stands in at the size the 3D draws it (a 2-unit plane in a 30-degree view at 4.2 = 89%). */
+.athena-face:not([data-ready="1"]) {
+  background: url(/athena.webp) center / 89% no-repeat;
+  -webkit-mask-image: radial-gradient(circle, #000 52%, transparent 70%);
+  mask-image: radial-gradient(circle, #000 52%, transparent 70%);
+}
+.cta {
+  color: var(--accent-ink);
+  background: linear-gradient(135deg, var(--glow-1) 0%, var(--accent-2) 100%);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--glow-1) 45%, transparent);
+  transition: transform 150ms ease;
+}
+.cta:active { transform: scale(0.97); }
+.arc {
+  animation: arc-in 700ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.bubble {
+  will-change: transform, opacity;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.bubble.soon {
+  filter: saturate(0.3);
+}
+@keyframes arc-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+}
+.typing { display: inline-flex; gap: 4px; }
+.typing i {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--muted);
+  animation: typing 1.2s ease-in-out infinite;
+}
+.typing i:nth-child(2) { animation-delay: 0.15s; }
+.typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing { 50% { opacity: 0.25; transform: translateY(-3px); } }
+.rise { animation: rise 520ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after, .orb, .arc, .typing i, .rise { animation: none !important; }
+  .orb-stage { transition: opacity 200ms ease; }
+}

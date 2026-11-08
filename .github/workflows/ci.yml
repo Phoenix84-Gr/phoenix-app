@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Typecheck, lint, unit tests, skill mirror
+        run: npm run check
+      - name: Production build (with a marker in the key variable)
+        run: npm run build
+        env:
+          ASSISTANT_API_KEY: sk-ci-SECRETMARKER-4c1d
+      - name: End-to-end smoke checks against the running app
+        shell: bash
+        env:
+          ASSISTANT_API_KEY: sk-ci-SECRETMARKER-4c1d
+          SECRET_MARKER: SECRETMARKER-4c1d
+        run: |
+          npm start &
+          for i in $(seq 1 60); do curl -s -o /dev/null http://localhost:3000/ && break; sleep 1; done
+          node scripts/smoke.mjs
